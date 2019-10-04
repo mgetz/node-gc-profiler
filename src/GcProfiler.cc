@@ -158,7 +158,7 @@ namespace GcProfiler
 	}
 #else
 
-	void StartTimer ()
+	double StartTimer ()
 	{
 		clock_gettime(CLOCK_REALTIME, &_timePointStart);
 		// convert to ms
