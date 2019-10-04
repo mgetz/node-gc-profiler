@@ -106,7 +106,7 @@ namespace GcProfiler
 		
 		GcProfilerData * data = (GcProfilerData*)req->data;
 		
-		const unsigned argc = 4;
+		const unsigned argc = 5;
 		v8::Local<v8::Value> argv[argc] = {
 			Nan::New<Number>(data->startTime),
 			Nan::New<Number>(data->preciseStart),
