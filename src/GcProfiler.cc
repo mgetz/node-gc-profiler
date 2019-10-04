@@ -22,6 +22,7 @@ namespace GcProfiler
 		GCType type;
 		GCCallbackFlags flags;
 		double duration;
+		double preciseStart;
 	};
 
 	// static variables
@@ -46,7 +47,7 @@ namespace GcProfiler
 	NAN_GC_CALLBACK(After);
 	void UvAsyncWork(uv_work_t * req);
 	void UvAsyncAfter(uv_work_t * req);
-	void StartTimer();
+	double StartTimer();
 	double EndTimer();
 	
 	// init
@@ -80,7 +81,7 @@ namespace GcProfiler
 	{
 		_data = new GcProfilerData();
 		_data->startTime = time(NULL);
-		StartTimer();
+		_data->preciseStart = StartTimer();
 	}
 	
 	NAN_GC_CALLBACK(After)
@@ -108,6 +109,7 @@ namespace GcProfiler
 		const unsigned argc = 4;
 		v8::Local<v8::Value> argv[argc] = {
 			Nan::New<Number>(data->startTime),
+			Nan::New<Number>(data->preciseStart),
 			Nan::New<Number>(data->duration),
 			Nan::New<Number>((int)data->type),
 			Nan::New<Number>((int)data->flags)
@@ -159,6 +161,8 @@ namespace GcProfiler
 	void StartTimer ()
 	{
 		clock_gettime(CLOCK_REALTIME, &_timePointStart);
+		// convert to ms
+		return (_timePointStart.tv_sec * 1000) + double(_timePointStart.tv_nsec) / 1000000;
 	}
 	
 	double EndTimer ()
