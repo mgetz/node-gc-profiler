@@ -22,7 +22,7 @@ main.GCCallbackFlags = {
 	kGCCallbackFlagForced: 1 << 2
 };
 
-GcProfiler.loadProfiler(function (startTime, preciseStart, ms, type, flags)
+GcProfiler.loadProfiler(function (startTime, preciseStart, ms, type, flags, startNs)
 {
 	var info = {
 		date: new Date(startTime * 1000),
@@ -30,7 +30,8 @@ GcProfiler.loadProfiler(function (startTime, preciseStart, ms, type, flags)
 		duration: ms,
 		type: GC_TYPES[type],
 		forced: !!(flags && main.GCCallbackFlags.kGCCallbackFlagForced),
-		flags: flags
+		flags: flags,
+		startNs: startNs
 	};
 
 	main.emit('gc', info);
