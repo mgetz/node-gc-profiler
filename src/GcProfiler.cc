@@ -23,6 +23,7 @@ namespace GcProfiler
 		GCCallbackFlags flags;
 		double duration;
 		long double preciseStart;
+		int startNs;
 	};
 
 	// static variables
@@ -82,6 +83,7 @@ namespace GcProfiler
 		_data = new GcProfilerData();
 		_data->startTime = time(NULL);
 		_data->preciseStart = StartTimer();
+		_data->startNs = _timePointStart.tv_nsec;
 	}
 	
 	NAN_GC_CALLBACK(After)
@@ -106,13 +108,14 @@ namespace GcProfiler
 		
 		GcProfilerData * data = (GcProfilerData*)req->data;
 		
-		const unsigned argc = 5;
+		const unsigned argc = 6;
 		v8::Local<v8::Value> argv[argc] = {
 			Nan::New<Number>(data->startTime),
 			Nan::New<Number>(data->preciseStart),
 			Nan::New<Number>(data->duration),
 			Nan::New<Number>((int)data->type),
-			Nan::New<Number>((int)data->flags)
+			Nan::New<Number>((int)data->flags),
+			Nan::New<Number>(data->startNs)
 		};
 		
 		delete data;
