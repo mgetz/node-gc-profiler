@@ -22,7 +22,7 @@ namespace GcProfiler
 		GCType type;
 		GCCallbackFlags flags;
 		double duration;
-		double preciseStart;
+		long double preciseStart;
 	};
 
 	// static variables
@@ -47,7 +47,7 @@ namespace GcProfiler
 	NAN_GC_CALLBACK(After);
 	void UvAsyncWork(uv_work_t * req);
 	void UvAsyncAfter(uv_work_t * req);
-	double StartTimer();
+	long double StartTimer();
 	double EndTimer();
 	
 	// init
@@ -158,7 +158,7 @@ namespace GcProfiler
 	}
 #else
 
-	double StartTimer ()
+	long double StartTimer ()
 	{
 		clock_gettime(CLOCK_REALTIME, &_timePointStart);
 		// convert to ms
